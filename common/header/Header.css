@@ -1,0 +1,36 @@
+.headerClass{
+    display: flex;
+    background-color: purple;
+    height: 70px;
+    padding-left: 11px;
+    padding-top: 11px;
+      
+}
+#logInBtn:hover {
+    background-color:#81a583;
+}
+#logOutBtn:hover {
+    background-color:#81a583;
+}
+#logInBtn{
+    background-color:#13e251;
+    color:#0e0d0d       
+}
+#logOutBtn{
+    background-color:#13e251;
+    color:#0e0d0d       
+}
+
+#paper{
+    
+    width: 300px;
+}
+.MuiAppBar-root {
+    width: 100%;
+    display: flex;
+    z-index: 1100;
+    box-sizing: border-box;
+    flex-shrink: 1;
+    justify-content: center;
+    flex-direction: column;
+}
