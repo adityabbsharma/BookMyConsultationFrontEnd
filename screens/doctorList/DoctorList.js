@@ -54,7 +54,7 @@ const DoctorList = (props) => {
             method: "GET",
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json",
+                "Content-Type": "application/json;charset=UTF-8",
                 // "Cache-Control": "no-cache",  
                 // "Access-Control-Allow-Headers": "Content-Type, Accept, X-Requested-With, remember-me, Authorization, type",
                 // 'Access-Control-Allow-Origin': "http://localhost:3000"         
@@ -76,7 +76,7 @@ const DoctorList = (props) => {
                 "Accept": "application/json",
                 // "Content-Type": "application/json;charset=UTF-8",
                 // "Content-Type": "application/json",
-                "Content-Type": "application/json",
+                "Content-Type": "application/json;charset=UTF-8",
                 // "Cache-Control": "no-cache",
                 // "Access-Control-Allow-Headers": "Content-Type, Accept, X-Requested-With, remember-me, Authorization, type",
                 // 'Access-Control-Allow-Origin': "http://localhost:3000"
@@ -116,10 +116,23 @@ const DoctorList = (props) => {
         let filteredList = doctorsList;
         console.log(doctorsList);
         console.log(e.target.value);
+        if(e.target.value ===""){
+            console.log("I m null character");
+        }
         let doctorSpeciality = e.target.value;
         let filteredListup = filteredList.filter((doctor) => doctor.speciality === doctorSpeciality);
+        if(filteredListup == null){
+            console.log("I m null filetredlist");
+        }
         console.log(filteredListup);
-        setFilteredDoctorsList(filteredListup);
+        if(e.target.value ===""){
+            console.log("I m null character");
+            setFilteredDoctorsList(doctorsList);
+        }
+        else{
+            setFilteredDoctorsList(filteredListup);
+        }
+        
         console.log(filteredDoctorsList);
     }
     return (
@@ -168,7 +181,27 @@ const DoctorList = (props) => {
                     </div>
                 ) : (
                     <div>
+                        {doctorsList.map((item) => (
+                            <Paper className="paperDoctor">
+                                <Typography className="typographyStyle" style={{ margin: "10px" }}>
+                                    Doctor Name: {item.firstName} {item.lastName}
+                                </Typography>
+                                <Typography className="typographyStyle" style={{ marginTop: "20px", marginLeft: "10px" }}>
+                                    Speciality: {item.speciality}
+                                </Typography>
+                                <Typography className="typographyStyle" style={{ margin: "10px" }}>
+                                    Rating:*****
+                                </Typography>
+                                {/* <p style={{fontSize:"1em"}}>Doctor Name: Ocean Garner</p>
+                                <p>Speciality: Pulmonologist</p>
+                                <p>Rating:*****</p> */}
+                                <div style={{ display: "flex", justifyContent: "space-evenly", margin: "10px" }}>
+                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }}>Book Appointment</Button>
+                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "green", color: "white" }}>View Details</Button>
+                                </div>
 
+                            </Paper>
+                        ))}
                     </div>
                 )}
 
