@@ -72,9 +72,14 @@ const Home = (props) => {
                         <Tab label="APPOINTMENT" style={{ minWidth: "50%" }} />
                     </Tabs>
                     <TabPanel value={value} index={0}>
-                        <DoctorList></DoctorList>        
+                        <DoctorList {...props}></DoctorList>        
                     </TabPanel>
-                    <TabPanel value={value} index={1}>Item2 </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        {
+                            loggedInFlag ? (<Button>LogOut</Button>) :
+                                (<p>Login to see appointments</p>)
+                        }
+                    </TabPanel>
                 </Grid>
 
             </div>

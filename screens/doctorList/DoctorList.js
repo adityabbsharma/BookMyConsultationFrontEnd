@@ -13,6 +13,11 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import '../home/Home.css';
+import Modal from '@material-ui/core/Modal';
+import '../doctorList/DoctorList.css';
+import AppBar from '@material-ui/core/AppBar';
+import BookAppointment from './BookAppointment';
+
 
 const useStyles = makeStyles((theme) => ({
 
@@ -39,6 +44,12 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: "Roboto",
         fontWeight: "400",
         lineHeight: 1.5
+    },
+    paperStyleLogIn: {
+        position: 'fixed',
+        top: '55%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',        
     }
 }));
 
@@ -46,18 +57,14 @@ const DoctorList = (props) => {
     const classes = useStyles();
     const [listOfSpecialities, setListOfSpecialities] = useState([]);
     const [doctorsList, setDoctorsList] = useState([]);
-    // const [speciality, setSpeciality] = useState("");
     const [filteredDoctorsList, setFilteredDoctorsList] = useState([]);
-    let doctorListJson = [];
+    // let doctorListJson = [];
     useEffect(() => {
         fetch("http://localhost:8080/doctors/speciality", {
             method: "GET",
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json;charset=UTF-8",
-                // "Cache-Control": "no-cache",  
-                // "Access-Control-Allow-Headers": "Content-Type, Accept, X-Requested-With, remember-me, Authorization, type",
-                // 'Access-Control-Allow-Origin': "http://localhost:3000"         
+                "Content-Type": "application/json;charset=UTF-8"
             }
 
         }).then((response) => {
@@ -67,73 +74,90 @@ const DoctorList = (props) => {
             setListOfSpecialities(response);
         }).catch(function (error) { console.log(error) });
 
-        // listOfSpecialities.map((item) => {
-        // console.log("item is+"+item);
         fetch(`http://localhost:8080/doctors`, {
             method: "GET",
-            // mode: 'no-cors',
             headers: {
                 "Accept": "application/json",
-                // "Content-Type": "application/json;charset=UTF-8",
-                // "Content-Type": "application/json",
-                "Content-Type": "application/json;charset=UTF-8",
-                // "Cache-Control": "no-cache",
-                // "Access-Control-Allow-Headers": "Content-Type, Accept, X-Requested-With, remember-me, Authorization, type",
-                // 'Access-Control-Allow-Origin': "http://localhost:3000"
-
+                "Content-Type": "application/json;charset=UTF-8"
             }
         }).then((response) =>
-            //  console.log(response)
-            // json.array.forEach(element => {
-            //     console.log(element.address);
-            // })
             response.json()
-            // for (const [index, element] of response.entries()) {
-            //     // const [index, element] = [0, 'a'] on 1st iteration, then [1, 'b'], etc. 
-            //     console.log(index, element);
-            // }
         ).then((json) => {
-            // doctorListJson = json;
-            // json.map((doc)=>setDoctorsList([...doctorsList,{doc}]));
-            // console.log(json);
-            setDoctorsList(json)
-            // console.log("i m here + item="+item+"response is"+doctorsList);
-            // json.map((object)=>{setDoctorsList((doctorsList)=>[...doctorsList,{object}]);});
             // json.array.forEach(element => {
-            //     console.log(element.address);
+            //     if(i>10){
+            //         break;
+            //     }
+            //     setDoctorsList({...doctorsList,element});
             // });
+            // console.log("json.length"+json.length);
+            // console.log("json[0]"+json[0]);
+            // for (var key = 0; key < json.length; key++) {
+            //     if(key>10){
+            //         break;
+            //     }
+            //     var value = json.array[key];
+            //     console.log(key); // This is the key;
+            //     console.log(value); // This is the value;
+            //     setDoctorsList({...doctorsList,value});
+            // }
+            // var key=0;
+            // json = json.filter((item)=>{
+            //     key++;
+            //     if(key>10){
+            //         console.log("I m inside filter if");  
+            //         return false;
+            //     }
+            //     else{
+            //         console.log("I m inside filter else");  
+            //         return true;
+            //     }        
 
+            // });
+            setDoctorsList(json);
         }).catch(function (error) {
             console.log(error)
         });
 
-        // })
     }, []);
     const [selectFlag, SetSelectFlag] = useState(false);
     const handleSpecialitySelect = (e) => {
-        // setSpeciality(e.target.value);
         SetSelectFlag(true);
         let filteredList = doctorsList;
         console.log(doctorsList);
         console.log(e.target.value);
-        if(e.target.value ===""){
+        if (e.target.value === "") {
             console.log("I m null character");
         }
         let doctorSpeciality = e.target.value;
         let filteredListup = filteredList.filter((doctor) => doctor.speciality === doctorSpeciality);
-        if(filteredListup == null){
+        if (filteredListup == null) {
             console.log("I m null filetredlist");
         }
         console.log(filteredListup);
-        if(e.target.value ===""){
+        if (e.target.value === "") {
             console.log("I m null character");
             setFilteredDoctorsList(doctorsList);
         }
-        else{
+        else {
             setFilteredDoctorsList(filteredListup);
         }
-        
+
         console.log(filteredDoctorsList);
+    }
+    const [isBkAptModalOpen, setIsBkAptModalOpen] = useState(false);
+    const toggleBkAptModal = () => {
+        setIsBkAptModalOpen(!isBkAptModalOpen);
+    };
+    const [doctorNameForAppointment,setDoctorNameForAppointment] = useState(""); 
+    const handleBookAppointment = (fName,lName) => {
+        // console.log("Book Apt pressed Outer" + itemId);
+        if (!props.loggedInFlag) {
+            setIsBkAptModalOpen(true);
+            console.log("Book Apt pressed");           
+        }
+    };
+    const setDoctorForApt = (name) =>{
+        setDoctorNameForAppointment(name);
     }
     return (
         <Fragment>
@@ -141,7 +165,6 @@ const DoctorList = (props) => {
                 <FormControl className={classes.formControl}>
                     <InputLabel>SPECIALITY</InputLabel>
                     <Select
-                        // value={speciality}
                         onChange={handleSpecialitySelect}
                     >
                         <MenuItem value="">SELECT</MenuItem>
@@ -157,7 +180,7 @@ const DoctorList = (props) => {
                 {selectFlag ? (
                     <div>
                         {filteredDoctorsList.map((item) => (
-                            <Paper className="paperDoctor">
+                            <Paper key={item.id} className="paperDoctor">
                                 <Typography className="typographyStyle" style={{ margin: "10px" }}>
                                     Doctor Name: {item.firstName} {item.lastName}
                                 </Typography>
@@ -167,11 +190,8 @@ const DoctorList = (props) => {
                                 <Typography className="typographyStyle" style={{ margin: "10px" }}>
                                     Rating:*****
                                 </Typography>
-                                {/* <p style={{fontSize:"1em"}}>Doctor Name: Ocean Garner</p>
-                                <p>Speciality: Pulmonologist</p>
-                                <p>Rating:*****</p> */}
                                 <div style={{ display: "flex", justifyContent: "space-evenly", margin: "10px" }}>
-                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }}>Book Appointment</Button>
+                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }} onClick={() => {handleBookAppointment(item.id);setDoctorForApt(item.firstName+item.lastName);}}>Book Appointment</Button>
                                     <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "green", color: "white" }}>View Details</Button>
                                 </div>
 
@@ -182,7 +202,7 @@ const DoctorList = (props) => {
                 ) : (
                     <div>
                         {doctorsList.map((item) => (
-                            <Paper className="paperDoctor">
+                            <Paper key={item.id} className="paperDoctor">
                                 <Typography className="typographyStyle" style={{ margin: "10px" }}>
                                     Doctor Name: {item.firstName} {item.lastName}
                                 </Typography>
@@ -196,7 +216,7 @@ const DoctorList = (props) => {
                                 <p>Speciality: Pulmonologist</p>
                                 <p>Rating:*****</p> */}
                                 <div style={{ display: "flex", justifyContent: "space-evenly", margin: "10px" }}>
-                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }}>Book Appointment</Button>
+                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }} onClick={() => {handleBookAppointment(item.id);setDoctorForApt(`${item.firstName+item.lastName}`);}}>Book Appointment</Button>
                                     <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "green", color: "white" }}>View Details</Button>
                                 </div>
 
@@ -204,8 +224,18 @@ const DoctorList = (props) => {
                         ))}
                     </div>
                 )}
+                <Modal
+                    open={isBkAptModalOpen}
+                    onClose={toggleBkAptModal}
+                >
+                    <Paper id="paper" className={classes.paperStyleLogIn} >
+                    <AppBar position="static" style={{ backgroundColor: 'purple', height: "70px", textAlign: "center", textAnchor: "middle" }}>Book an Appointment</AppBar>
+                    <BookAppointment toggleBkAptModal={toggleBkAptModal} doctorNameForAppointment={doctorNameForAppointment}></BookAppointment>
+                    </Paper>
+                </Modal>
 
             </div>
+
 
         </Fragment>
 

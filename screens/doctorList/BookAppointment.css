@@ -1,0 +1,24 @@
+.MuiInputLabel-formControl {
+    /* top: 0; */
+    left: 0;
+    position: absolute;
+    transform: translate(0, -38px) scale(1);
+}
+.MuiInputLabel-shrink {
+
+    transform: translate(0, 25px) scale(1);
+}
+/* .formCtrl{
+    transform-origin: 'top left',
+    transform: 'translate(0, 25px) scale(1)',
+    left: 0
+    position: 'absolute',
+    transform: translate(0, -38px) scale(1);
+} */
+#loginBtn{
+    height: 40px;
+    width:100px;
+    position: relative;
+    margin-left: 100px;
+    
+}
