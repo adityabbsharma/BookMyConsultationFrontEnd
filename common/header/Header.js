@@ -109,7 +109,7 @@ const Header = (props) => {
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
                 >
-                    <Paper id="paper" className={classes.paperStyleLogIn} style={{height: `${modalHeight}`}}>
+                    <Paper id="paperHeader" className={classes.paperStyleLogIn} style={{height: `${modalHeight}`}}>
                         <AppBar position="static" style={{ backgroundColor: 'purple', height: "70px", textAlign: "center", textAnchor: "middle" }}>AUTHENTICATION</AppBar>
                         <Tabs
                             value={modalValue}
