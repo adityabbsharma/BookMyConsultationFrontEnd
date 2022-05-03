@@ -17,6 +17,7 @@ import Modal from '@material-ui/core/Modal';
 import '../doctorList/DoctorList.css';
 import AppBar from '@material-ui/core/AppBar';
 import BookAppointment from './BookAppointment';
+import DoctorDetails from './DoctorDetails';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +51,21 @@ const useStyles = makeStyles((theme) => ({
         top: '55%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
+        // textAlign:"left",
+        // margin:"15px",
+        // padding:"20px",
+        // cursor:"pointer"
+    },
+    paperBookAppt:{
+        textAlign:"left",
+        margin:"15px",
+        padding:"20px",
+        cursor:"pointer"
+    },
+    paperViewDetails:{
+
     }
+
 }));
 
 const DoctorList = (props) => {
@@ -148,6 +163,11 @@ const DoctorList = (props) => {
     const toggleBkAptModal = () => {
         setIsBkAptModalOpen(!isBkAptModalOpen);
     };
+    const [isViewDetailsModalOpen, setIsViewDetailsModalOpen] = useState(false);
+    const toggleViewDetailsModal = () => {
+        setIsViewDetailsModalOpen(!isViewDetailsModalOpen);
+    };
+
     const [doctorNameForAppointment, setDoctorNameForAppointment] = useState("");
     const [doctorSelectedForApt,setDoctorSelectedForApt] = useState([]);
     const handleBookAppointment = (item) => {
@@ -158,7 +178,16 @@ const DoctorList = (props) => {
             setIsBkAptModalOpen(true);
             console.log("Book Apt pressed");
         }
+        else if(!props.loggedInFlag){
+            alert("Login to Book Appointment")
+        }
     };  
+    const handleViewDetails = (item) =>{
+        setDoctorSelectedForApt(item);        
+        setIsViewDetailsModalOpen(true);
+        console.log("Book Apt pressed");
+        
+    }
     const setDoctorForApt = (fName, lName) => {
         let fullName = fName + " " + lName;
         console.log("fullName" + fullName);
@@ -223,7 +252,7 @@ const DoctorList = (props) => {
                                 <p>Rating:*****</p> */}
                                 <div style={{ display: "flex", justifyContent: "space-evenly", margin: "10px" }}>
                                     <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }} onClick={() => { handleBookAppointment(item); setDoctorForApt(item.firstName, item.lastName); }}>Book Appointment</Button>
-                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "green", color: "white" }}>View Details</Button>
+                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "green", color: "white" }} onClick={() => { handleViewDetails(item)}}>View Details</Button>
                                 </div>
 
                             </Paper>
@@ -234,9 +263,19 @@ const DoctorList = (props) => {
                     open={isBkAptModalOpen}
                     onClose={toggleBkAptModal}
                 >
-                    <Card id="paper" className={classes.paperStyleLogIn} >
-                        <AppBar position="static" style={{ backgroundColor: 'purple', height: "70px", textAlign: "center", textAnchor: "middle" }}>Book an Appointment</AppBar>
-                        <BookAppointment {...props} toggleBkAptModal={toggleBkAptModal} doctorNameForAppointment={doctorNameForAppointment} doctorSelectedForApt={doctorSelectedForApt}></BookAppointment>
+                    <Card id="paper"  className={classes.paperStyleLogIn} >
+                        <AppBar position="static" style={{ backgroundColor: 'purple', height: "70px",fontSize:"20px", textAlign: "center", textAnchor: "middle",padding:"11px"}}>Book an Appointment</AppBar>
+                        <BookAppointment className={classes.paperBookAppt} {...props} toggleBkAptModal={toggleBkAptModal} doctorNameForAppointment={doctorNameForAppointment} doctorSelectedForApt={doctorSelectedForApt}></BookAppointment>
+                    </Card>
+                </Modal>
+                <Modal
+                    open={isViewDetailsModalOpen}
+                    onClose={toggleViewDetailsModal}
+                >
+                    <Card id="paperViewDetails" className={classes.paperStyleLogIn} >
+                        <AppBar position="static" style={{ backgroundColor: 'purple', height: "70px", fontSize:"20px" ,textAlign: "center", textAnchor: "middle",padding:"11px" }}>Doctor Details </AppBar>
+                        {/* <BookAppointment {...props} toggleBkAptModal={toggleBkAptModal} doctorNameForAppointment={doctorNameForAppointment} doctorSelectedForApt={doctorSelectedForApt}></BookAppointment> */}
+                        <DoctorDetails {...props} doctor={doctorSelectedForApt}></DoctorDetails>
                     </Card>
                 </Modal>
 

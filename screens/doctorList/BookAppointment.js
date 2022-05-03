@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -64,10 +64,16 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         margin: "20px",
         width: "220px"
+    },
+    paperBookAppt:{
+        textAlign:"left",
+        margin:"15px",
+        padding:"20px",
+        cursor:"pointer"
     }
 }));
 
-const BookAppointment = ({ toggleBkAptModal, doctorNameForAppointment,doctorSelectedForApt,loginDetails }) => {
+const BookAppointment = ({ toggleBkAptModal, doctorNameForAppointment, doctorSelectedForApt, loginDetails }) => {
     const classes = useStyles();
     const history = useHistory();
 
@@ -87,13 +93,13 @@ const BookAppointment = ({ toggleBkAptModal, doctorNameForAppointment,doctorSele
     // const handleTimeSlotSelect = (e) =>{
     //     setTimeSlotSelected(e.target.value);
     // }
-    const [apptDate,setApptDate] = useState("");
-    const [timeSlotCheck,setTimeSlotCheck] = useState(false);
+    const [apptDate, setApptDate] = useState("");
+    const [timeSlotCheck, setTimeSlotCheck] = useState(false);
 
     const handleBookAppointmentSubmit = (e) => {
         e.preventDefault();
         console.log("doctorNameForAppointment" + doctorNameForAppointment);
-        console.log("currentdate is "+currentDate);
+        console.log("currentdate is " + currentDate);
         // console.log("sessionStorage.getItem()"+sessionStorage.getItem("access-token"));
         //to Write 
         fetch("http://localhost:8080/appointments", {
@@ -115,82 +121,84 @@ const BookAppointment = ({ toggleBkAptModal, doctorNameForAppointment,doctorSele
                 userEmailId: `${loginDetails.emailId}`,
                 timeSlot: `${e.target["2"].value}`,
                 appointmentDate: `${e.target["1"].value}`,
-                createdDate: `${currentDate}`,  
+                createdDate: `${currentDate}`,
                 symptoms: `${e.target["3"].value}`,
                 priorMedicalHistory: `${e.target["4"].value}`,
-                status:"ACTIVE"
+                status: "ACTIVE"
             })
-        }).then((response)=>{
-            if(response.status===201){
+        }).then((response) => {
+            if (response.status === 201) {
                 console.log(e.target["2"].value);
                 toggleBkAptModal();
                 history.push("/");
             }
-            else if(response.status===400){
+            else if (response.status === 400) {
                 alert("Either the slot is already booked or not available");
             }
         }).catch(function (error) {
             console.error(error);
         });
-        
+
 
     }
     return (
+        // <Paper >
+            <form className={classes.paperBookAppt} autoComplete="off" onSubmit={handleBookAppointmentSubmit}>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                    <FormControl style={{ minHeight: "200px", display: "flex", flexDirection: "column" }}>
+                        <TextField style={{ margin: "30px", width: "200px" }} required disabled label="Doctor Name" defaultValue={doctorNameForAppointment} />
+                        <FormControl className={classes.root} style={{ marginleft: "initial" }} required >
+                            <InputLabel htmlFor="doa" className={classes.MuiInputLabelRegisterDate} >Date Of Appointment </InputLabel>
+                            <Input style={{ marginleft: "40px", marginRight: "21px", }} id="doa" name="doa" type="date" inputFormat="yyyy-mm-dd" defaultValue={`${currentDate}`} />
+                        </FormControl>
 
-        <form style={{}} autoComplete="off" onSubmit={handleBookAppointmentSubmit}>
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
-                <FormControl style={{ minHeight: "200px", display: "flex", flexDirection: "column" }}>
-                    <TextField style={{ margin: "30px", width: "200px" }} required disabled label="Doctor Name" defaultValue={doctorNameForAppointment} />
-                    <FormControl className={classes.root} style={{ marginleft: "initial" }} required >
-                        <InputLabel htmlFor="doa" className={classes.MuiInputLabelRegisterDate} >Date Of Appointment </InputLabel>
-                        <Input style={{ marginleft: "40px", marginRight: "21px", }} id="doa" name="doa" type="date" inputFormat="yyyy-mm-dd" defaultValue={`${currentDate}`} />
+                        <FormControl className={classes.formControl} required>
+                            <InputLabel className={classes.MuiInputLabelRegister}>Time Slot</InputLabel>
+                            <Select
+                                onChange={(e) => setTimeSlotCheck(true)}
+                                style={{ marginLeft: "20px" }}>
+                                {timeSlots.map(item => {
+                                    return (
+                                        <MenuItem value={item}>
+                                            {item}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                            {!timeSlotCheck && (
+                                <FormHelperText>
+                                    <span style={{ color: "red", marginLeft: "30px" }}>Select a time slot</span>
+                                </FormHelperText>
+                            )}
+                        </FormControl>
                     </FormControl>
-
-                    <FormControl className={classes.formControl} required>
-                        <InputLabel className={classes.MuiInputLabelRegister}>Time Slot</InputLabel>
-                        <Select
-                            onChange={(e) => setTimeSlotCheck(true)}
-                            style={{ marginLeft: "20px" }}>                           
-                            {timeSlots.map(item => {
-                                return (
-                                    <MenuItem value={item}>
-                                        {item}
-                                    </MenuItem>
-                                );
-                            })}
-                        </Select>
-                        {!timeSlotCheck && (
-                            <FormHelperText>
-                                <span style={{color:"red",marginLeft:"30px"}}>Select a time slot</span>
-                            </FormHelperText>
-                        )}
+                    <FormControl style={{ minHeight: "200px", marginLeft: "40px" }}>
+                        <TextField
+                            id="standard-multiline-static"
+                            label="Medical History"
+                            multiline
+                            rows={4}
+                            style={{ margintop: "10px", margin: "20px" }}
+                        />
+                        <TextField
+                            id="standard-multiline-static"
+                            label="Symptoms"
+                            multiline
+                            rows={4}
+                            style={{ margin: "20px" }}
+                        />
                     </FormControl>
-                </FormControl>
-                <FormControl style={{ minHeight: "200px", marginLeft: "40px" }}>
-                    <TextField
-                        id="standard-multiline-static"
-                        label="Medical History"
-                        multiline
-                        rows={4}
-                        style={{ margintop: "10px", margin: "20px" }}
-                    />
-                    <TextField
-                        id="standard-multiline-static"
-                        label="Symptoms"
-                        multiline
-                        rows={4}
-                        style={{ margin: "20px" }}
-                    />
-                </FormControl>
-            </div>
-            <div style={{ display: "flex" }}>
-                <Button type="submit" id="loginBtn" variant="contained" color="primary">
-                    Book Appointment
-                </Button>
-            </div>
+                </div>
+                <div style={{ display: "flex",marginLeft:"-18px"}}>
+                    <Button type="submit" id="loginBtn" variant="contained" color="primary">
+                        Book Appointment
+                    </Button>
+                </div>
 
 
-        </form>
+            </form>
+        // </Paper>
+
 
 
 
