@@ -149,18 +149,23 @@ const DoctorList = (props) => {
         setIsBkAptModalOpen(!isBkAptModalOpen);
     };
     const [doctorNameForAppointment, setDoctorNameForAppointment] = useState("");
-    const handleBookAppointment = (fName, lName) => {
-        // console.log("Book Apt pressed Outer" + itemId);
-        if (!props.loggedInFlag) {
+    const [doctorSelectedForApt,setDoctorSelectedForApt] = useState([]);
+    const handleBookAppointment = (item) => {
+        console.log("Book Apt pressed Outer checking item.id" + item.id);
+        setDoctorSelectedForApt(item);
+        console.log("item.email "+item.emailId);
+        if (props.loggedInFlag) {
             setIsBkAptModalOpen(true);
             console.log("Book Apt pressed");
         }
-    };
+    };  
     const setDoctorForApt = (fName, lName) => {
         let fullName = fName + " " + lName;
         console.log("fullName" + fullName);
         setDoctorNameForAppointment(fullName);
     }
+   
+
     return (
         <Fragment>
             <div className="doctorTabPanelMainContainer">
@@ -168,8 +173,7 @@ const DoctorList = (props) => {
                     <InputLabel>SPECIALITY</InputLabel>
                     <Select
                         onChange={handleSpecialitySelect}
-                    >
-                        <MenuItem value="">SELECT</MenuItem>
+                    >                   
                         {listOfSpecialities.map(item => {
                             return (
                                 <MenuItem value={item}>
@@ -193,7 +197,7 @@ const DoctorList = (props) => {
                                     Rating:*****
                                 </Typography>
                                 <div style={{ display: "flex", justifyContent: "space-evenly", margin: "10px" }}>
-                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }} onClick={() => { handleBookAppointment(item.id); setDoctorForApt(item.firstName, item.lastName); }}>Book Appointment</Button>
+                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }} onClick={() => { handleBookAppointment(item); setDoctorForApt(item.firstName, item.lastName); }}>Book Appointment</Button>
                                     <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "green", color: "white" }}>View Details</Button>
                                 </div>
 
@@ -218,7 +222,7 @@ const DoctorList = (props) => {
                                 <p>Speciality: Pulmonologist</p>
                                 <p>Rating:*****</p> */}
                                 <div style={{ display: "flex", justifyContent: "space-evenly", margin: "10px" }}>
-                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }} onClick={() => { handleBookAppointment(item.id); setDoctorForApt(item.firstName, item.lastName); }}>Book Appointment</Button>
+                                    <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "blueviolet", color: "white" }} onClick={() => { handleBookAppointment(item); setDoctorForApt(item.firstName, item.lastName); }}>Book Appointment</Button>
                                     <Button style={{ margin: "10px", height: "30px", width: "200px", backgroundColor: "green", color: "white" }}>View Details</Button>
                                 </div>
 
@@ -232,7 +236,7 @@ const DoctorList = (props) => {
                 >
                     <Card id="paper" className={classes.paperStyleLogIn} >
                         <AppBar position="static" style={{ backgroundColor: 'purple', height: "70px", textAlign: "center", textAnchor: "middle" }}>Book an Appointment</AppBar>
-                        <BookAppointment toggleBkAptModal={toggleBkAptModal} doctorNameForAppointment={doctorNameForAppointment}></BookAppointment>
+                        <BookAppointment {...props} toggleBkAptModal={toggleBkAptModal} doctorNameForAppointment={doctorNameForAppointment} doctorSelectedForApt={doctorSelectedForApt}></BookAppointment>
                     </Card>
                 </Modal>
 

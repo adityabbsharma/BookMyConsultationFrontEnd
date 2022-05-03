@@ -16,9 +16,10 @@
     transform: translate(0, -38px) scale(1);
 } */
 #loginBtn{
-    height: 40px;
-    width:100px;
+    height: 39px;
+    width: 198px;
     position: relative;
-    margin-left: 100px;
+    margin-left: 213px;
+    margin-top: 10px;
     
 }

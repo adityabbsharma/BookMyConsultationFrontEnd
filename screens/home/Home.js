@@ -54,12 +54,18 @@ const Home = (props) => {
     };
    
     const [loggedInFlag, setLoggedInFlag] = useState(sessionStorage.getItem("access-token") === null ? false : true);
+    const [loginDetails, setLoginDetails] = useState({
+        emailId: "",
+        password: "",
+        firstName:"",
+        lastName:""
+    });
    
 
     return (
 
         <div>
-            <Header {...props} userDetails={props.userDetails} loggedInFlag={loggedInFlag} setLoggedInFlag={setLoggedInFlag}></Header>
+            <Header {...props} userDetails={props.userDetails} loginDetails={loginDetails} setLoginDetails={setLoginDetails} loggedInFlag={loggedInFlag} setLoggedInFlag={setLoggedInFlag}></Header>
             <div className={classes.root}>
                 <Grid item xs={12}>
                     <Tabs
@@ -72,7 +78,7 @@ const Home = (props) => {
                         <Tab label="APPOINTMENT" style={{ minWidth: "50%" }} />
                     </Tabs>
                     <TabPanel value={value} index={0}>
-                        <DoctorList {...props}></DoctorList>        
+                        <DoctorList {...props} loginDetails={loginDetails} setLoginDetails={setLoginDetails} loggedInFlag={loggedInFlag} setLoggedInFlag={setLoggedInFlag}></DoctorList>        
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         {

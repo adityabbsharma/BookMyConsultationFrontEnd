@@ -37,6 +37,7 @@ const Header = (props) => {
     const history = useHistory();
     const classes = useStyles();  
     const loggedInFlag = props.loggedInFlag;
+    const setLoggedInFlag = props.setLoggedInFlag;
     const [modalValue, setModalValue] = React.useState(0);
     const [modalHeight, setModalHeight] = React.useState();
 
@@ -120,7 +121,7 @@ const Header = (props) => {
                             <Tab label="LOGIN" style={{ minWidth: "50%" }} />
                             <Tab label="REGISTER" style={{ minWidth: "50%" }} />
                         </Tabs>
-                        <TabPanel value={modalValue} index={0}><Login {...props} toggleModal= {toggleModal} changeModalHeight={changeModalHeight}></Login></TabPanel>
+                        <TabPanel value={modalValue} index={0}><Login {...props} setLoggedInFlag={setLoggedInFlag} toggleModal= {toggleModal} changeModalHeight={changeModalHeight}></Login></TabPanel>
                         <TabPanel value={modalValue} index={1}>
                             <Register {...props} toggleModal= {toggleModal} userDetails ={props.userDetails} changeModalHeight={changeModalHeight}></Register>
                         </TabPanel>

@@ -34,23 +34,18 @@ const useStyles = makeStyles((theme) => ({
 const Login = (props) => {
     const classes = useStyles();
     const history = useHistory();
+    const setLoggedInFlag = props.setLoggedInFlag;
     props.changeModalHeight('400px');
-    const [loginDetails, setLoginDetails] = useState({
-        emailId: "",
-        password: ""
-    });
+    const loginDetails = props.loginDetails;
+    const setLoginDetails = props.setLoginDetails;
     const logInSubmitHandler = (e) => {
         e.preventDefault();
-        // const param = window.btoa(`${loginDetails.emailId}:${loginDetails.password}`);
-        setLoginDetails({
-            emailId: `${e.target["0"].value}`,
-            password: `${e.target["1"].value}`
-        });
-        console.log(`${e.target["0"].value}`+`${e.target["1"].value}`);
-        console.log("Basic " +
-            window.btoa(
-                loginDetails.emailId + ":" + loginDetails.password
-            ));
+        // const param = window.btoa(`${loginDetails.emailId}:${loginDetails.password}`);        
+        console.log(`${e.target["0"].value}` + `${e.target["1"].value}`);
+        // console.log("Basic " +
+        //     window.btoa(
+        //         loginDetails.emailId + ":" + loginDetails.password
+        //     ));
         fetch("http://localhost:8080/auth/login", {
             method: "POST",
             headers: {
@@ -68,7 +63,7 @@ const Login = (props) => {
         })
             .then((response) => {
                 if (response.status === 200) {
-                    return response.json();                
+                    return response.json();
                 }
                 else {
                     throw new Error(response.statusText);
@@ -78,7 +73,15 @@ const Login = (props) => {
             }).then((response) => {
                 sessionStorage.setItem("access-token", response["accessToken"]);
                 console.log("accesstoken after login is" + response["accessToken"]);
-                props.setLoggedInFlag(true);
+                console.log("firstName after login is" + response["firstName"]);
+                setLoginDetails({
+                    emailId: `${e.target["0"].value}`,
+                    password: `${e.target["1"].value}`,
+                    firstName: `${response["firstName"]}`,
+                    lastName: `${response["lastName"]}`
+
+                });
+                setLoggedInFlag(true);
                 props.toggleModal();
                 history.push("/");
             }).catch(function (error) {
