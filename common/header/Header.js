@@ -29,24 +29,26 @@ const useStyles = makeStyles((theme) => ({
         position: 'fixed',
         top: '42%',
         left: '50%',
-        transform: 'translate(-50%, -50%)',        
+        transform: 'translate(-50%, -50%)',
     }
 }));
 
 const Header = (props) => {
     const history = useHistory();
-    const classes = useStyles();  
+    const classes = useStyles();
     const loggedInFlag = props.loggedInFlag;
     const setLoggedInFlag = props.setLoggedInFlag;
     const [modalValue, setModalValue] = React.useState(0);
     const [modalHeight, setModalHeight] = React.useState();
+    const setLogInDetails = props.setLogInDetails;
+    const handleLogInDetails = props.handleLogInDetails;
 
     const handleChange = (event, modalValue) => {
         setModalValue(modalValue);
     }
     const changeModalHeight = (modalHt) => {
         console.log(`modalHeight changing from ${modalHeight}`);
-        setModalHeight(modalHt);     
+        setModalHeight(modalHt);
         console.log(`modalHeight changing to ${modalHeight}`);
     }
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,19 +57,19 @@ const Header = (props) => {
     };
     const handleOpen = () => {
         setIsModalOpen(true);
-        console.log("In handleopen accstoken is= "+sessionStorage.getItem("access-token"));
-        console.log("modalIsOpen="+isModalOpen);
-     
+        console.log("In handleopen accstoken is= " + sessionStorage.getItem("access-token"));
+        console.log("modalIsOpen=" + isModalOpen);
+
     };
-    const handleLogOut = () =>{
-        console.log("In handleLogot accstoken is= "+sessionStorage.getItem("access-token"));
-        fetch("http://localhost:8080/auth/logout", {
+    const handleLogOut = () => {
+        console.log("In handleLogot accstoken is= " + sessionStorage.getItem("access-token"));
+        fetch("auth/logout", {
             method: "POST",
             headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json;charset=UTF-8",
-                // "Content-Type": "application/json",
-                // "Cache-Control": "no-cache",
+                // "Accept": "application/json",
+                // "Content-Type": "application/json;charset=UTF-8",
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
                 authorization:
                     "Bearer " +
                     sessionStorage.getItem("access-token")
@@ -77,17 +79,11 @@ const Header = (props) => {
         });
         sessionStorage.removeItem("access-token");
         props.setLoggedInFlag(false);
+        sessionStorage.setItem("logInDetailsSessionStorage", JSON.stringify(""));
         history.push("/");
         setIsModalOpen(false);
     }
-    
 
-    // const [isLogInRegisterPressed, setloginregisterpressedflag] = useState(false);
-    // const logInRegisterButtonHandler = () => {
-    //     setloginregisterpressedflag(true);
-    //     setIsModalOpen(true);
-    // };
-   
     return (
 
         <div>
@@ -104,13 +100,13 @@ const Header = (props) => {
                         }
                     </Toolbar>
                 </AppBar>
-                <Modal                    
+                <Modal
                     open={isModalOpen}
-                    onClose={toggleModal}                
+                    onClose={toggleModal}
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
                 >
-                    <Paper id="paperHeader" className={classes.paperStyleLogIn} style={{height: `${modalHeight}`}}>
+                    <Paper id="paperHeader" className={classes.paperStyleLogIn} style={{ height: `${modalHeight}` }}>
                         <AppBar position="static" style={{ backgroundColor: 'purple', height: "70px", textAlign: "center", textAnchor: "middle" }}>AUTHENTICATION</AppBar>
                         <Tabs
                             value={modalValue}
@@ -121,9 +117,9 @@ const Header = (props) => {
                             <Tab label="LOGIN" style={{ minWidth: "50%" }} />
                             <Tab label="REGISTER" style={{ minWidth: "50%" }} />
                         </Tabs>
-                        <TabPanel value={modalValue} index={0}><Login {...props} setLoggedInFlag={setLoggedInFlag} toggleModal= {toggleModal} changeModalHeight={changeModalHeight}></Login></TabPanel>
+                        <TabPanel value={modalValue} index={0}><Login {...props} setLoggedInFlag={setLoggedInFlag} toggleModal={toggleModal} setLogInDetails={setLogInDetails} handleLogInDetails={handleLogInDetails} changeModalHeight={changeModalHeight}></Login></TabPanel>
                         <TabPanel value={modalValue} index={1}>
-                            <Register {...props} toggleModal= {toggleModal} userDetails ={props.userDetails} changeModalHeight={changeModalHeight}></Register>
+                            <Register {...props} toggleModal={toggleModal} userDetails={props.userDetails} changeModalHeight={changeModalHeight}></Register>
                         </TabPanel>
                     </Paper>
                 </Modal>

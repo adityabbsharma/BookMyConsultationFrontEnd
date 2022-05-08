@@ -14,6 +14,7 @@ import Select from '@material-ui/core/Select';
 import './Home.css';
 import Button from '@material-ui/core/Button';
 import DoctorList from '../doctorList/DoctorList';
+import Appointment from '../appointment/Appointment.js';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,15 +34,15 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
         '& > *': {
-          margin: theme.spacing(2),
-          width: theme.spacing(16),
-          height: theme.spacing(16),
-        },       
+            margin: theme.spacing(2),
+            width: theme.spacing(16),
+            height: theme.spacing(16),
+        },
     },
     typographyStyle: {
         fontSize: "1.5rem",
-        fontFamily:"Roboto",
-        fontWeight:"400",
+        fontFamily: "Roboto",
+        fontWeight: "400",
         lineHeight: 1.5
     }
 }));
@@ -52,20 +53,32 @@ const Home = (props) => {
     const handleChange = (event, value) => {
         setValue(value);
     };
-   
+
     const [loggedInFlag, setLoggedInFlag] = useState(sessionStorage.getItem("access-token") === null ? false : true);
-    const [loginDetails, setLoginDetails] = useState({
+    const [logInDetails, setLogInDetails] = useState({
         emailId: "",
         password: "",
-        firstName:"",
-        lastName:""
+        firstName: "",
+        lastName: "",
+        userId: ""
     });
-   
+    const handleLogInDetails = (response) => {
+        console.log("responseemailAddress=" + response["emailAddress"]);
+        setLogInDetails({
+            emailId: `${response["emailAddress"]}`,
+            password: `${response["password"]}`,
+            firstName: `${response["firstName"]}`,
+            lastName: `${response["lastName"]}`,
+            userId: `${response["id"]}`
+        });
+        console.log("JSON.stringify(response)=" + JSON.stringify(response));
+        sessionStorage.setItem("logInDetailsSessionStorage", JSON.stringify(response));
+    }
 
     return (
 
         <div>
-            <Header {...props} userDetails={props.userDetails} loginDetails={loginDetails} setLoginDetails={setLoginDetails} loggedInFlag={loggedInFlag} setLoggedInFlag={setLoggedInFlag}></Header>
+            <Header {...props} userDetails={props.userDetails} logInDetails={logInDetails} setLogInDetails={setLogInDetails} handleLogInDetails={handleLogInDetails} loggedInFlag={loggedInFlag} setLoggedInFlag={setLoggedInFlag}></Header>
             <div className={classes.root}>
                 <Grid item xs={12}>
                     <Tabs
@@ -78,12 +91,11 @@ const Home = (props) => {
                         <Tab label="APPOINTMENT" style={{ minWidth: "50%" }} />
                     </Tabs>
                     <TabPanel value={value} index={0}>
-                        <DoctorList {...props} loginDetails={loginDetails} setLoginDetails={setLoginDetails} loggedInFlag={loggedInFlag} setLoggedInFlag={setLoggedInFlag}></DoctorList>        
+                        <DoctorList {...props} logInDetails={logInDetails} loggedInFlag={loggedInFlag} setLoggedInFlag={setLoggedInFlag}></DoctorList>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         {
-                            loggedInFlag ? (<Button>LogOut</Button>) :
-                                (<p>Login to see appointments</p>)
+                            <Appointment {...props} loggedInFlag={loggedInFlag} logInDetails={logInDetails}></Appointment>
                         }
                     </TabPanel>
                 </Grid>

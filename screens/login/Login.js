@@ -37,23 +37,16 @@ const Login = (props) => {
     const setLoggedInFlag = props.setLoggedInFlag;
     props.changeModalHeight('400px');
     const loginDetails = props.loginDetails;
-    const setLoginDetails = props.setLoginDetails;
+    const setLogInDetails = props.setLogInDetails;
+    const handleLogInDetails = props.handleLogInDetails;
     const logInSubmitHandler = (e) => {
         e.preventDefault();
-        // const param = window.btoa(`${loginDetails.emailId}:${loginDetails.password}`);        
         console.log(`${e.target["0"].value}` + `${e.target["1"].value}`);
-        // console.log("Basic " +
-        //     window.btoa(
-        //         loginDetails.emailId + ":" + loginDetails.password
-        //     ));
-        fetch("http://localhost:8080/auth/login", {
+        fetch("auth/login", {
             method: "POST",
             headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json;charset=UTF-8",
-                // Authorization: `Basic ${param}`
-                // "Content-Type": "application/json",
-                // "Cache-Control": "no-cache",
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
                 Authorization:
                     "Basic " +
                     window.btoa(
@@ -74,13 +67,8 @@ const Login = (props) => {
                 sessionStorage.setItem("access-token", response["accessToken"]);
                 console.log("accesstoken after login is" + response["accessToken"]);
                 console.log("firstName after login is" + response["firstName"]);
-                setLoginDetails({
-                    emailId: `${e.target["0"].value}`,
-                    password: `${e.target["1"].value}`,
-                    firstName: `${response["firstName"]}`,
-                    lastName: `${response["lastName"]}`
-
-                });
+                console.log("userId after login is" + response["id"]);
+                handleLogInDetails(response);
                 setLoggedInFlag(true);
                 props.toggleModal();
                 history.push("/");
@@ -105,9 +93,6 @@ const Login = (props) => {
             </Button>
 
         </form>
-
-
-
     )
 }
 export default Login;

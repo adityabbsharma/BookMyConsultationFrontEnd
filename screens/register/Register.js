@@ -1,14 +1,11 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import './Register.css';
 import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,27 +14,16 @@ const useStyles = makeStyles((theme) => ({
             // width: '25ch',
             border: 0,
             margin: '10px',
-            display: 'inline-flex',            
+            display: 'inline-flex',
             padding: '0px',
             position: 'relative',
             minwidth: '0px',
             flexDirection: 'column',
             verticalAlign: 'top',
             marginLeft: '40px'
-            
+
         },
     },
-    // MuiFormControlrootRegister:{        
-    //     border: 0,
-    //     margin: '-16px',
-    //     display: 'inline-flex',
-    //     padding: '0px',
-    //     position: 'relative',
-    //     minwidth: '0px',
-    //     flexDirection: 'column',
-    //     verticalAlign: 'top',
-    //     marginLeft: '40px'
-    // },    
     MuiInputLabelRegister: {
         transformorigin: 'top left',
         // transform: 'translate(0,1.5px) scale(0.85)',
@@ -46,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         marginLeft: '38px',
         margin: '-18px',
-        flexDirection:'row'
+        flexDirection: 'row'
     },
     MuiInputLabelRegisterDate: {
         // transformorigin: 'top left',
@@ -56,18 +42,16 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         marginLeft: '38px',
         margin: '-18px',
-        flexDirection:'row'
+        flexDirection: 'row'
     }
 }));
 
-const Register = ({handleUserDetailsChange,changeModalHeight,toggleModal}) => {
+const Register = ({ handleUserDetailsChange, changeModalHeight, toggleModal }) => {
     const classes = useStyles();
     const history = useHistory();
     changeModalHeight('550px');
-    // const handleUserDetailsChange = props.handleUserDetailsChange;
-    // const userDetails = props.userDetails;
     const handleRegisterSubmit = (e) => {
-        e.preventDefault();  
+        e.preventDefault();
         const regDetails = {
             firstName: `${e.target["0"].value}`,
             lastName: `${e.target["1"].value}`,
@@ -75,37 +59,27 @@ const Register = ({handleUserDetailsChange,changeModalHeight,toggleModal}) => {
             mobile: `${e.target["3"].value}`,
             password: `${e.target["4"].value}`,
             emailId: `${e.target["5"].value}`
-          }
-        handleUserDetailsChange(regDetails);
-        console.log("In Register userDetails = "+JSON.stringify(regDetails));
-        fetch("http://localhost:8080/users/register", {
-          body: JSON.stringify(regDetails),
-          method: 'POST',
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json;charset=UTF-8"
-          }
+        }
+        console.log("In Register userDetails = " + JSON.stringify(regDetails));
+        fetch("users/register", {
+            method: 'POST',
+            headers: {
+                // "Accept": "application/json",        
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache"
+            },
+            body: JSON.stringify(regDetails)
         }).then((rawResponse) => {
-        //   if (rawResponse.status === 201) {
-        //     console.log("RawResponse status is Ok = " + rawResponse.status);
-        //     return rawResponse.json();
-        //   } else {
-        //     console.log("In Else rawRsponsestatus= " + rawResponse.status);
-        //     return new Error("Error ====");
-        //   }
             toggleModal();
             history.push("/");
         }).catch(function (error) {
-          console.error(error);
+            console.error(error);
         });
-    
-      }
-    // const handleChange = (e) => {
 
-    // }
+    }
     return (
 
-        <form autoComplete="off" onSubmit= {handleRegisterSubmit}>
+        <form autoComplete="off" onSubmit={handleRegisterSubmit}>
             <FormControl className={classes.root} required>
                 <InputLabel htmlFor="firstName" className={classes.MuiInputLabelRegister}>First Name</InputLabel>
                 <Input id="firstName" name="firstName" aria-describedby="my-helper-text" type="text" />
@@ -138,9 +112,6 @@ const Register = ({handleUserDetailsChange,changeModalHeight,toggleModal}) => {
             </Button>
 
         </form>
-
-
-
     )
 }
 export default Register;
