@@ -85,11 +85,10 @@ const Header = (props) => {
     }
 
     return (
-
-        <div>
+        
             <div>
-                <AppBar position="static" style={{ backgroundColor: 'purple', height: "70px" }}>
-                    <Toolbar>
+                <AppBar position="fixed" style={{ backgroundColor: 'purple', height: "70px" }}>
+                    <Toolbar >
                         <img src={pic} alt="not displayed" style={{ height: "35px", backgroundColor: "#ff7f7f" }}></img>
                         <Typography variant="h6" className={classes.title} style={{ padding: "11px" }}>
                             Doctor Finder
@@ -125,7 +124,7 @@ const Header = (props) => {
                 </Modal>
             </div>
 
-        </div>
+        
     );
 }
 function TabPanel(props) {

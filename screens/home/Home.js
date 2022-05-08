@@ -1,24 +1,17 @@
-import { React, useEffect, useState } from 'react';
-import { Typography } from '@material-ui/core';
+import { React,useState } from 'react';
+
 import Header from '../../common/header/Header';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import './Home.css';
-import Button from '@material-ui/core/Button';
 import DoctorList from '../doctorList/DoctorList';
 import Appointment from '../appointment/Appointment.js';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        // flexGrow: 1,
         fullwidth: "true"
     },
     paper: {
@@ -77,10 +70,11 @@ const Home = (props) => {
 
     return (
 
-        <div>
+        <div >            
             <Header {...props} userDetails={props.userDetails} logInDetails={logInDetails} setLogInDetails={setLogInDetails} handleLogInDetails={handleLogInDetails} loggedInFlag={loggedInFlag} setLoggedInFlag={setLoggedInFlag}></Header>
+                        
             <div className={classes.root}>
-                <Grid item xs={12}>
+                <Grid item xs={12} style={{marginTop:"70px"}}>
                     <Tabs
                         value={value}
                         onChange={handleChange}
